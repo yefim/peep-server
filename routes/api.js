@@ -3,13 +3,14 @@ var phone = require('phone');
 var router = express.Router();
 
 var peep = require('../lib/peep');
+var render = require('../lib/render');
 
 router.post('/login', function(req, res) {
   if (req.body && req.body.number && phone(req.body.number).length && req.body.token) {
     req.body.number = phone(req.body.number)[0];
     peep.login(req.body)
       .then(function(result) {
-        res.json(result);
+        res.json(render.user(result));
       })
       .catch(function(e) {
         res.status(400).send(e.toString());
@@ -30,7 +31,7 @@ router.post('/register', function(req, res) {
 
     peep.register(req.body)
       .then(function(result) {
-        res.json(result);
+        res.json(render.user(result));
       })
       .catch(function(e) {
         res.status(400).send(e.toString());
