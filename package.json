@@ -9,12 +9,13 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^2.9.27",
     "body-parser": "^1.12.4",
     "express": "^4.12.4",
-    "mongodb": "^2.0.33",
+    "mongodb": "^1.4.38",
+    "mongoskin": "^1.4.13",
     "node-uuid": "^1.4.3",
     "phone": "^1.0.4",
-    "promised-mongo": "^0.11.1",
-    "q": "^1.4.1"
+    "underscore": "^1.8.3"
   }
 }
