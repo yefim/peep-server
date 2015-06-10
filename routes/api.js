@@ -5,22 +5,7 @@ var router = express.Router();
 var peep = require('../lib/peep');
 var render = require('../lib/render');
 
-router.post('/login', function(req, res) {
-  if (req.body && req.body.number && phone(req.body.number).length && req.body.token) {
-    req.body.number = phone(req.body.number)[0];
-    peep.login(req.body)
-      .then(function(result) {
-        res.json(render.user(result));
-      })
-      .catch(function(e) {
-        res.status(400).send(e.toString());
-      });
-  } else {
-    res.status(400).end();
-  }
-});
-
-router.post('/register', function(req, res) {
+router.post('/login_or_register', function(req, res) {
   if (req.body && req.body.number && phone(req.body.number).length && req.body.token && req.body.contacts) {
     req.body.number = phone(req.body.number)[0];
     // Clean up contacts
@@ -29,15 +14,16 @@ router.post('/register', function(req, res) {
       return contact;
     }).filter(function(contact) { return contact.number !== '' && contact.number !== req.body.number; });
 
-    peep.register(req.body)
-      .then(function(result) {
-        res.json(render.user(result));
+    peep.isRegistered(req.body)
+      .then(function(isRegistered) {
+        var func = isRegistered ? 'login' : 'register';
+        return peep[func](req.body).then(function(result) {
+          return res.json(render.user(result));
+        });
       })
       .catch(function(e) {
         res.status(400).send(e.toString());
       });
-  } else {
-    res.status(400).end();
   }
 });
 
